@@ -8,6 +8,7 @@ VALIDATION_SSH_KEY="${VALIDATION_SSH_KEY:-$HOME/.ssh/id_rsa}"
 VALIDATION_ORDS_PORT="${VALIDATION_ORDS_PORT:-8182}"
 VALIDATION_ORDS_DIR="${VALIDATION_ORDS_DIR:-/root/uc-validation-ords}"
 VALIDATION_ORDS_CONTAINER="${VALIDATION_ORDS_CONTAINER:-dimi-validation-ords}"
+BASE_ORDS_CONTAINER="${BASE_ORDS_CONTAINER:-local-26ai-ords}"
 
 ssh -i "$VALIDATION_SSH_KEY" -o StrictHostKeyChecking=no "${VALIDATION_SSH_USER}@${VALIDATION_HOST}" \
   "VALIDATION_PDB='$VALIDATION_PDB' VALIDATION_ORDS_PORT='$VALIDATION_ORDS_PORT' VALIDATION_ORDS_DIR='$VALIDATION_ORDS_DIR' VALIDATION_ORDS_CONTAINER='$VALIDATION_ORDS_CONTAINER' bash -se" <<'REMOTE'
@@ -27,6 +28,11 @@ docker run -d \
   -v "$VALIDATION_ORDS_DIR/ords-config:/etc/ords/config" \
   -v /root/uc-local-apex-dev/apex-images:/opt/oracle/apex/images \
   container-registry.oracle.com/database/ords:25.4.0 >/dev/null
+
+BASE_ORDS_PASSWORD="$(docker exec "$BASE_ORDS_CONTAINER" bash -lc "ords config --db-pool default get --secret db.password | tail -n 1")"
+printf '%s' "$BASE_ORDS_PASSWORD" | \
+  docker exec -i "$VALIDATION_ORDS_CONTAINER" bash -lc "ords config --db-pool default secret --password-stdin db.password" >/dev/null
+docker restart "$VALIDATION_ORDS_CONTAINER" >/dev/null
 
 for _ in $(seq 1 60); do
   if curl -fsS "http://localhost:${VALIDATION_ORDS_PORT}/ords/" >/dev/null; then
