@@ -26,15 +26,12 @@ create or replace package body ut_dimi_math_api as
         merge into dimi_samples target
         using (
             select
-                -1 as sample_id
+                - 1 as sample_id
             from
                 dual
-        ) source
-        on ( target.sample_id = source.sample_id )
-        when matched then
-        update
-        set
-            target.sample_name = 'Sample row',
+        ) source on ( target.sample_id = source.sample_id )
+        when matched then update
+        set target.sample_name = 'Sample row',
             target.sample_text = 'seeded-for-test',
             target.sample_blob = hextoraw('DEADBEEF')
         when not matched then
@@ -42,10 +39,9 @@ create or replace package body ut_dimi_math_api as
             sample_id,
             sample_name,
             sample_text,
-            sample_blob
-        )
+            sample_blob )
         values
-            ( -1,
+            ( - 1,
               'Sample row',
               'seeded-for-test',
               hextoraw('DEADBEEF') );
@@ -67,4 +63,4 @@ end ut_dimi_math_api;
 /
 
 
--- sqlcl_snapshot {"hash":"d85e9119b34e29cf8c45a55846af32a0e1999b95","type":"PACKAGE_BODY","name":"UT_DIMI_MATH_API","schemaName":"DIMI","sxml":""}
+-- sqlcl_snapshot {"hash":"a0d8dd48920dfc1cc942601d3d4fa45057db4267","type":"PACKAGE_BODY","name":"UT_DIMI_MATH_API","schemaName":"DIMI","sxml":""}
