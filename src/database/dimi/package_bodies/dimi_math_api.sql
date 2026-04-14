@@ -5,11 +5,11 @@ create or replace package body dimi_math_api as
         p_right number
     ) return number is
     begin
-        return p_left + p_right;
+        return nvl(p_left, 0) + nvl(p_right, 0);
     end add_numbers;
 
 end dimi_math_api;
 /
 
 
--- sqlcl_snapshot {"hash":"cb7f4d2cd88975f1a0c47dc3462c08a25d336094","type":"PACKAGE_BODY","name":"DIMI_MATH_API","schemaName":"DIMI","sxml":""}
+-- sqlcl_snapshot {"hash":"1ced6a03a8b0c305e7f64ee83609cf87407e1aca","type":"PACKAGE_BODY","name":"DIMI_MATH_API","schemaName":"DIMI","sxml":""}
