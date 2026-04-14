@@ -1,5 +1,7 @@
 # Oracle SQLcl Projects
+artifact/
 artifact/*
+artifacts/
 artifacts/*
 dist/
 var/*
