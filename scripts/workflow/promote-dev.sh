@@ -3,6 +3,7 @@ set -euo pipefail
 
 STAGE_CONNECTION="${STAGE_CONNECTION:-${DEV_CONNECTION:-${DEV_SQLCL}}}"
 DEV_CONNECTION="${DEV_CONNECTION:-${DEV_SQLCL}}"
+DEV_SYNC_BRANCH="${DEV_SYNC_BRANCH:-dev-sync-base}"
 PROMOTE_VERSION="${1:-${BUILD_NUMBER:-snapshot}}"
 ARTIFACT_FILE="${2:-}"
 
@@ -25,7 +26,7 @@ SQL
 
 if [[ -z "$ARTIFACT_FILE" ]]; then
   SQL_TEXT=$(cat <<SQL
-project stage
+project stage -branch-name "$DEV_SYNC_BRANCH"
 project verify
 project gen-artifact -version "$PROMOTE_VERSION"
 SQL

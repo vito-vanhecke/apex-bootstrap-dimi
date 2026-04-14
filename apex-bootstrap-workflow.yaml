@@ -3,6 +3,7 @@ project:
     schema: DIMI
     repo_name: apex-bootstrap-dimi
     default_branch: main
+    dev_sync_branch: dev-sync-base
     test_sync_branch: test-sync-base
     apex_workspace: DIMI
     apex_app_ids: []
