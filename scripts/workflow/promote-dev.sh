@@ -31,11 +31,13 @@ project gen-artifact -version "$PROMOTE_VERSION"
 SQL
 )
   run_sqlcl "$STAGE_CONNECTION" "$SQL_TEXT"
-  ARTIFACT_FILE="$(ls -1 artifacts/*.zip 2>/dev/null | sort | tail -n 1)"
+  ARTIFACT_FILE="$(
+    find artifact artifacts -maxdepth 1 -type f -name '*.zip' 2>/dev/null | sort | tail -n 1
+  )"
 fi
 
 if [[ -z "$ARTIFACT_FILE" ]]; then
-  echo "No artifact file found under artifacts/"
+  echo "No artifact file found under artifact/ or artifacts/"
   exit 1
 fi
 
