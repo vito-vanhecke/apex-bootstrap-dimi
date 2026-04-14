@@ -3,6 +3,7 @@ project:
     schema: DIMI
     repo_name: apex-bootstrap-dimi
     default_branch: main
+    test_sync_branch: test-sync-base
     apex_workspace: DIMI
     apex_app_ids: []
 paths:
@@ -73,7 +74,12 @@ pdb:
     branch_prefix: BR_
     validation_prefix: VAL_
     clone_sql_template: |-
-        create pluggable database {{ .TargetPDB }} from {{ .SourcePDB }};
+        create pluggable database {{ .TargetPDB }} from {{ .SourcePDB }} file_name_convert = (
+            '/FREEPDB1/', '/{{ .TargetPDB }}/',
+            '/opt/oracle/product/26ai/dbhomeFree/dbs/audit01.dbf', '/opt/oracle/oradata/FREE/{{ .TargetPDB }}/audit01.dbf',
+            '/opt/oracle/product/26ai/dbhomeFree/dbs/tbs_apex.dbf', '/opt/oracle/oradata/FREE/{{ .TargetPDB }}/tbs_apex.dbf',
+            '/opt/oracle/product/26ai/dbhomeFree/dbs/tbs_dimi.dat', '/opt/oracle/oradata/FREE/{{ .TargetPDB }}/tbs_dimi.dat'
+        );
         alter pluggable database {{ .TargetPDB }} open read write;
     drop_sql_template: |-
         alter pluggable database {{ .TargetPDB }} close immediate;
