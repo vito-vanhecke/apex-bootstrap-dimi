@@ -5,6 +5,9 @@ artifacts/
 artifacts/*
 dist/
 var/*
+node_modules/
+playwright-report/
+test-results/
 *.tar.gz
 *.tz
 *.zip
