@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "skills": {
+    "apex": {
+      "source": "avhrst/apex-component-modifier",
+      "sourceType": "github",
+      "computedHash": "5c3b991544ce6757569531b5a6ee133704bb6bb11a851b09c1738ab15e489d19"
+    },
+    "oracle-db-skills": {
+      "source": "krisrice/oracle-db-skills",
+      "sourceType": "github",
+      "computedHash": "0584e7bab89c5d5eb02c10347c962db294cf8ab5a9aaa3a8de57aff608e97260"
+    },
+    "sqlcl": {
+      "source": "avhrst/apex-component-modifier",
+      "sourceType": "github",
+      "computedHash": "1e1de0ba2f929ac53a5768708c4b03b83f1a2d82594593706a43be2bbcab479b"
+    }
+  }
+}

@@ -1,0 +1,95 @@
+project:
+    name: dimi
+    schema: DIMI
+    repo_name: apex-bootstrap-dimi
+    default_branch: main
+    apex_workspace: DIMI
+    apex_app_ids: []
+paths:
+    project_repo: .
+    apex_bootstrap_cli: ../apex-bootstrap-cli/apex-bootstrap
+    uc_local_apex_dev_repo: ../uc-local-apex-dev
+    local_instances_root: ../uc-local-instances
+tools:
+    git: git
+    github: gh
+    docker: docker
+    ssh: ssh
+    go: go
+    npx: npx
+sqlcl:
+    command: sql
+    version_manager: sqlv
+    setup_version: 25.3.2.317.1117
+    project_version: 26.1.0.086.1709
+connections:
+    dev:
+        sqlcl: DEV
+        admin_sqlcl: DEV_ADMIN
+        host: ""
+        ssh_user: ""
+        ssh_key: ""
+        pdb: DEVPDB
+    test:
+        sqlcl: TEST
+        admin_sqlcl: TEST_ADMIN
+        host: ""
+        ssh_user: ""
+        ssh_key: ""
+        pdb: TESTPDB
+    validation:
+        sqlcl: VALIDATION
+        admin_sqlcl: DEV_ADMIN
+        host: ""
+        ssh_user: ""
+        ssh_key: ""
+        pdb: VALIDATIONPDB
+local:
+    default_shared_dev: shared-dev
+    default_shared_test: shared-test
+    default_personal: personal-dev
+    instances:
+        personal-dev:
+            path: ../uc-local-instances/personal-dev
+            schema: DIMI
+            workspace: DIMI
+        shared-dev:
+            path: ../uc-local-instances/shared-dev
+            schema: DIMI
+            workspace: DIMI
+        shared-test:
+            path: ../uc-local-instances/shared-test
+            schema: DIMI
+            workspace: DIMI
+data:
+    mode: uc-local-copy
+    source_instance: shared-dev
+    target_instance: personal-dev
+    refresh_command: []
+pdb:
+    branch_admin_connection: DEV_ADMIN
+    validation_admin_connection: DEV_ADMIN
+    source_pdb: DEVPDB
+    branch_prefix: BR_
+    validation_prefix: VAL_
+    clone_sql_template: |-
+        create pluggable database {{ .TargetPDB }} from {{ .SourcePDB }};
+        alter pluggable database {{ .TargetPDB }} open read write;
+    drop_sql_template: |-
+        alter pluggable database {{ .TargetPDB }} close immediate;
+        drop pluggable database {{ .TargetPDB }} including datafiles;
+validation:
+    source_connection: DEV
+    target_connection: VALIDATION
+    utplsql_command:
+        - ./scripts/validation/run_utplsql.sh
+    playwright_command:
+        - ./scripts/validation/run_playwright.sh
+jenkins:
+    file: Jenkinsfile
+    promote_command:
+        - ./scripts/workflow/sync-dev.sh
+    artifact_command:
+        - ./scripts/workflow/release-artifact.sh
+    deploy_command:
+        - ./scripts/workflow/deploy-test.sh
