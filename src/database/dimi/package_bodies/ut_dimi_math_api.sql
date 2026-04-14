@@ -23,6 +23,7 @@ create or replace package body ut_dimi_math_api as
     procedure exports_complex_sample_data is
         l_count number;
     begin
+        -- Keep this branch as a no-op package delta for Jenkins validation smoke runs.
         merge into dimi_samples target
         using (
             select
