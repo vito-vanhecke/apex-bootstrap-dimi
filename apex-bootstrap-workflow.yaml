@@ -24,26 +24,26 @@ sqlcl:
     project_version: 26.1.0.086.1709
 connections:
     dev:
-        sqlcl: DEV
-        admin_sqlcl: DEV_ADMIN
-        host: ""
-        ssh_user: ""
-        ssh_key: ""
-        pdb: DEVPDB
+        sqlcl: ${DEV_SQLCL}
+        admin_sqlcl: ${DEV_ADMIN_SQLCL}
+        host: 94.130.168.67
+        ssh_user: root
+        ssh_key: ~/.ssh/id_rsa
+        pdb: FREEPDB1
     test:
-        sqlcl: TEST
-        admin_sqlcl: TEST_ADMIN
-        host: ""
-        ssh_user: ""
-        ssh_key: ""
-        pdb: TESTPDB
+        sqlcl: ${TEST_SQLCL}
+        admin_sqlcl: ${TEST_ADMIN_SQLCL}
+        host: 94.130.168.58
+        ssh_user: root
+        ssh_key: ~/.ssh/id_rsa
+        pdb: FREEPDB1
     validation:
-        sqlcl: VALIDATION
-        admin_sqlcl: DEV_ADMIN
-        host: ""
-        ssh_user: ""
-        ssh_key: ""
-        pdb: VALIDATIONPDB
+        sqlcl: ${VALIDATION_SQLCL}
+        admin_sqlcl: ${DEV_ADMIN_SQLCL}
+        host: 94.130.168.67
+        ssh_user: root
+        ssh_key: ~/.ssh/id_rsa
+        pdb: FREEPDB1
 local:
     default_shared_dev: shared-dev
     default_shared_test: shared-test
@@ -67,9 +67,9 @@ data:
     target_instance: personal-dev
     refresh_command: []
 pdb:
-    branch_admin_connection: DEV_ADMIN
-    validation_admin_connection: DEV_ADMIN
-    source_pdb: DEVPDB
+    branch_admin_connection: ${DEV_ADMIN_SQLCL}
+    validation_admin_connection: ${DEV_ADMIN_SQLCL}
+    source_pdb: FREEPDB1
     branch_prefix: BR_
     validation_prefix: VAL_
     clone_sql_template: |-
@@ -79,16 +79,21 @@ pdb:
         alter pluggable database {{ .TargetPDB }} close immediate;
         drop pluggable database {{ .TargetPDB }} including datafiles;
 validation:
-    source_connection: DEV
-    target_connection: VALIDATION
+    source_connection: ${DEV_SQLCL}
+    target_connection: ${VALIDATION_SQLCL}
+    prepare_command:
+        - ./scripts/validation/prepare_validation_env.sh
+    cleanup_command:
+        - ./scripts/validation/cleanup_validation_env.sh
     utplsql_command:
         - ./scripts/validation/run_utplsql.sh
     playwright_command:
         - ./scripts/validation/run_playwright.sh
+    playwright_base_url: http://94.130.168.67:8182/ords/
 jenkins:
     file: Jenkinsfile
     promote_command:
-        - ./scripts/workflow/sync-dev.sh
+        - ./scripts/workflow/promote-dev.sh
     artifact_command:
         - ./scripts/workflow/release-artifact.sh
     deploy_command:

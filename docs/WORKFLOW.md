@@ -26,6 +26,6 @@
 - Schema: `DIMI`
 - APEX workspace: `DIMI`
 - Default branch: `main`
-- DEV connection: `DEV`
-- TEST connection: `TEST`
-- Validation connection: `VALIDATION`
+- DEV connection: `${DEV_SQLCL}`
+- TEST connection: `${TEST_SQLCL}`
+- Validation connection: `${VALIDATION_SQLCL}`

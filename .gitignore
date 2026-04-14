@@ -1,5 +1,7 @@
 # Oracle SQLcl Projects
 artifact/*
+artifacts/*
+dist/
 var/*
 *.tar.gz
 *.tz

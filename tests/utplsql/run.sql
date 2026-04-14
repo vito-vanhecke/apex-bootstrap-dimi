@@ -1,7 +1,7 @@
 set serveroutput on
-prompt Replace this file with the project-specific utPLSQL suite runner.
+exec ut_runner.rebuild_annotation_cache('DIMI')
 begin
-    dbms_output.put_line('utPLSQL placeholder for dimi');
+    ut.run('UT_DIMI_MATH_API');
 end;
 /
 exit;

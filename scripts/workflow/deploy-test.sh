@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-TEST_CONNECTION="${TEST_CONNECTION:-TEST}"
+TEST_CONNECTION="${TEST_CONNECTION:-${TEST_SQLCL}}"
 ARTIFACT_FILE="${1:-$(ls -1 artifacts/*.zip 2>/dev/null | sort | tail -n 1)}"
 
 if [[ -z "${ARTIFACT_FILE}" ]]; then

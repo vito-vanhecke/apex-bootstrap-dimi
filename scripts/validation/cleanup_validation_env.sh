@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+VALIDATION_HOST="${VALIDATION_HOST:?VALIDATION_HOST is required}"
+VALIDATION_SSH_USER="${VALIDATION_SSH_USER:-root}"
+VALIDATION_SSH_KEY="${VALIDATION_SSH_KEY:-$HOME/.ssh/id_rsa}"
+VALIDATION_ORDS_CONTAINER="${VALIDATION_ORDS_CONTAINER:-dimi-validation-ords}"
+
+ssh -i "$VALIDATION_SSH_KEY" -o StrictHostKeyChecking=no "${VALIDATION_SSH_USER}@${VALIDATION_HOST}" \
+  "VALIDATION_ORDS_CONTAINER='$VALIDATION_ORDS_CONTAINER' bash -se" <<'REMOTE'
+set -euo pipefail
+docker rm -f "$VALIDATION_ORDS_CONTAINER" >/dev/null 2>&1 || true
+REMOTE

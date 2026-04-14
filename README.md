@@ -7,6 +7,7 @@ Shared `DEV` is authoritative. Git and the SQLcl project are the audited project
 
 ## Core Commands
 - `./scripts/workflow/sync-dev.sh` re-syncs the repository from shared DEV.
+- `./scripts/workflow/promote-dev.sh [version] [artifact.zip]` generates or reuses an artifact and deploys it into shared DEV.
 - `./scripts/workflow/release-artifact.sh <version>` creates the release artifact from DEV.
 - `./scripts/workflow/deploy-test.sh [artifact.zip]` deploys the artifact into TEST.
 - `./scripts/validation/run_utplsql.sh` runs database validation.

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-VALIDATION_CONNECTION="${VALIDATION_CONNECTION:-VALIDATION}"
+VALIDATION_CONNECTION="${UTPLSQL_CONNECTION:-${VALIDATION_CONNECTION:-${VALIDATION_SQLCL}}}"
 
 if [[ ! -f tests/utplsql/run.sql ]]; then
   echo "Missing tests/utplsql/run.sql"

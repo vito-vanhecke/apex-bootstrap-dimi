@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-DEV_CONNECTION="${DEV_CONNECTION:-DEV}"
+DEV_CONNECTION="${DEV_CONNECTION:-${DEV_SQLCL}}"
 PROJECT_SCHEMA="${PROJECT_SCHEMA:-DIMI}"
 
 run_sqlcl() {

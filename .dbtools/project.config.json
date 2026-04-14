@@ -36,10 +36,7 @@
   },
   "git": {
     "defaultBranch": "main",
-    "protectedBranches": [
-      "main",
-      "master"
-    ]
+    "protectedBranches": []
   },
   "lastReleaseVersion": "",
   "project": "dimi",
@@ -48,7 +45,7 @@
   ],
   "sqlcl": {
     "connectionName": "DEV",
-    "version": "26.1.0.086.1709"
+    "version": "26.1.0.0"
   },
   "stage": {
     "excludeObjects": [

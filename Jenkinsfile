@@ -2,28 +2,35 @@ pipeline {
   agent any
 
   environment {
-    DEV_CONNECTION = 'DEV'
-    VALIDATION_CONNECTION = 'VALIDATION'
-    TEST_CONNECTION = 'TEST'
-    PROJECT_SCHEMA = 'DIMI'
+    WORKFLOW_CLI = 'apex-bootstrap-workflow'
   }
 
   stages {
-    stage('Sync DEV') {
+    stage('Validate Branch') {
       steps {
-        sh './scripts/workflow/sync-dev.sh'
+        sh '''
+          "$WORKFLOW_CLI" --config apex-bootstrap-workflow.yaml validate \
+            --repo . \
+            --branch "${BRANCH_NAME:-validation}" \
+            --create-validation-pdb
+        '''
       }
     }
 
-    stage('Database Validation') {
-      steps {
-        sh './scripts/validation/run_utplsql.sh'
+    stage('Promote DEV') {
+      when {
+        branch 'main'
       }
-    }
-
-    stage('APEX Validation') {
       steps {
-        sh './scripts/validation/run_playwright.sh'
+        sh '''
+          "$WORKFLOW_CLI" --config apex-bootstrap-workflow.yaml promote-dev \
+            --repo . \
+            --version "${BUILD_NUMBER}"
+        '''
+        sh '''
+          "$WORKFLOW_CLI" --config apex-bootstrap-workflow.yaml project sync-dev \
+            --repo .
+        '''
       }
     }
 
@@ -32,7 +39,11 @@ pipeline {
         branch 'main'
       }
       steps {
-        sh './scripts/workflow/release-artifact.sh "${BUILD_NUMBER}"'
+        sh '''
+          "$WORKFLOW_CLI" --config apex-bootstrap-workflow.yaml release \
+            --repo . \
+            --version "${BUILD_NUMBER}"
+        '''
       }
     }
 
@@ -41,7 +52,10 @@ pipeline {
         branch 'main'
       }
       steps {
-        sh './scripts/workflow/deploy-test.sh'
+        sh '''
+          "$WORKFLOW_CLI" --config apex-bootstrap-workflow.yaml deploy-test \
+            --repo .
+        '''
       }
     }
   }
