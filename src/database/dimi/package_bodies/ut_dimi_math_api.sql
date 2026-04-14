@@ -23,6 +23,33 @@ create or replace package body ut_dimi_math_api as
     procedure exports_complex_sample_data is
         l_count number;
     begin
+        merge into dimi_samples target
+        using (
+            select
+                -1 as sample_id
+            from
+                dual
+        ) source
+        on ( target.sample_id = source.sample_id )
+        when matched then
+        update
+        set
+            target.sample_name = 'Sample row',
+            target.sample_text = 'seeded-for-test',
+            target.sample_blob = hextoraw('DEADBEEF')
+        when not matched then
+        insert (
+            sample_id,
+            sample_name,
+            sample_text,
+            sample_blob
+        )
+        values
+            ( -1,
+              'Sample row',
+              'seeded-for-test',
+              hextoraw('DEADBEEF') );
+
         select
             count(*)
         into l_count
